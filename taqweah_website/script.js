@@ -1,18 +1,8 @@
-const menuBtn = document.getElementById("menuBtn");
-const navLinks = document.getElementById("navLinks");
 
-menuBtn?.addEventListener("click", () => {
-  navLinks.classList.toggle("open");
-});
-
-document.querySelectorAll(".nav-links a").forEach(link => {
-  link.addEventListener("click", () => navLinks.classList.remove("open"));
-});
-
-const form = document.getElementById("contactForm");
-form?.addEventListener("submit", (e) => {
-  e.preventDefault();
-  const data = new FormData(form);
-  const message = `مرحبا، أريد التسجيل في تقوية%0Aالاسم: ${encodeURIComponent(data.get("name"))}%0Aالهاتف: ${encodeURIComponent(data.get("phone"))}%0Aالخدمة: ${encodeURIComponent(data.get("service"))}%0Aالتفاصيل: ${encodeURIComponent(data.get("message") || "")}`;
-  window.open(`https://wa.me/971501234567?text=${message}`, "_blank");
-});
+const WA1='971582511933', WA2='971508375240';
+function wa(n,msg){window.open(`https://wa.me/${n}?text=${encodeURIComponent(msg)}`,'_blank')}
+function studentWhatsApp(num){wa(num===1?WA1:WA2,'Hello, I would like to register as a student at Taqweah.')}
+function teacherWhatsApp(num){wa(num===1?WA1:WA2,'Hello, I would like to apply as a teacher at Taqweah.')}
+function saveLead(type){const form=document.querySelector(`[data-form="${type}"]`);const data=Object.fromEntries(new FormData(form).entries());const leads=JSON.parse(localStorage.getItem('taqweah_leads')||'[]');leads.push({...data,type,createdAt:new Date().toISOString()});localStorage.setItem('taqweah_leads',JSON.stringify(leads));alert('Saved in this prototype. Real version will save to Supabase.')}
+function fakeLogin(role){location.href=role+'-dashboard.html'}
+function loadAdminLeads(){const el=document.getElementById('leadsTable');if(!el)return;const leads=JSON.parse(localStorage.getItem('taqweah_leads')||'[]');el.innerHTML=leads.length?leads.map(l=>`<tr><td>${l.type||'-'}</td><td>${l.name||'-'}</td><td>${l.phone||'-'}</td><td>${l.subject||l.service||'-'}</td></tr>`).join(''):`<tr><td colspan="4">No leads saved yet.</td></tr>`}loadAdminLeads();
