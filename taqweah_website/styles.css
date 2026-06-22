@@ -87,15 +87,16 @@ a{text-decoration:none;color:inherit}
   padding:150px 24px 70px;
 }
 .overlay{
-  position:absolute;inset:0;
-  background:radial-gradient(circle at 52% 48%,rgba(255,255,255,.2),rgba(255,255,255,.70) 64%,rgba(255,255,255,.95) 100%);
+position:absolute;
+inset:0;
+background:radial-gradient(circle at 52% 48%,rgba(255,255,255,.05),rgba(255,255,255,.10) 64%,rgba(255,255,255,.18) 100%);
 }
 .hero-inner{
   position:relative;
   width:min(1300px,100%);
   margin:auto;
   display:grid;
-  grid-template-columns:1fr 1fr;
+  grid-template-columns:0.9fr 1.1fr;
   align-items:center;
   gap:50px;
 }
