@@ -79,3 +79,15 @@ padding:20px;
 margin-top:40px;
 background:white;
 }
+.language-switch{
+display:flex;
+justify-content:center;
+gap:12px;
+margin-top:15px;
+}
+
+.language-switch button{
+background:white;
+color:#6d38e8;
+border:1px solid #d8c7ff;
+}
