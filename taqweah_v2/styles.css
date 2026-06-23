@@ -6,7 +6,10 @@ box-sizing:border-box;
 
 body{
 font-family:Arial,sans-serif;
-background:linear-gradient(135deg,#eef7ff,#dfefff);
+background:
+radial-gradient(circle at top left, rgba(109,56,232,0.28), transparent 35%),
+radial-gradient(circle at top right, rgba(33,185,242,0.22), transparent 35%),
+linear-gradient(135deg,#f4edff,#e9dcff,#dff4ff);
 color:#222;
 line-height:1.7;
 }
