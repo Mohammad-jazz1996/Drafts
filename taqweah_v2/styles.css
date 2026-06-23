@@ -126,3 +126,9 @@ direction:rtl;
 font-size:1rem;
 opacity:0.9;
 }
+.logo{
+    width:180px;
+    max-width:90%;
+    display:block;
+    margin:0 auto 15px;
+}
