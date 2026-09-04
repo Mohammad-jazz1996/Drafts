@@ -103,9 +103,11 @@ const projectTypes = [
     <div className="min-h-screen bg-[#06142E] text-white">
       <header className="relative z-50 mx-auto flex max-w-7xl items-center justify-between px-6 py-7">
         <div className="flex items-center gap-3">
-          <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-white text-xl font-black text-blue-700">
-            D
-          </div>
+         <img
+  src={draftsLogo}
+  alt="Drafts"
+  className="h-12 w-12 object-contain"
+/>
           <div>
             <div>
               <h1 className="text-lg font-bold tracking-[0.22em]">DRAFTS</h1>
