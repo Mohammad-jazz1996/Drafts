@@ -1,11 +1,114 @@
+import draftsLogo from "./assets/drafts-logo.png";
+import AdminDashboard from "./AdminDashboard";
+import rosesBg from "./assets/roses-bg.png";
 import React, { useState } from "react";
 import { Search, Presentation, FileText, PenLine, Palette, BarChart3, Megaphone, Timer, Upload, MessageCircleMore, Sparkles, Quote, GraduationCap, Video, NotebookTabs, BriefcaseBusiness, ShieldCheck } from "lucide-react";
 import { motion } from "framer-motion";
+import { supabase } from "./supabase";
 
 export default function DraftsWebsite() {
+const [adminOpen, setAdminOpen] = useState(false);
   const [page, setPage] = useState("home");
   const [selectedType, setSelectedType] = useState("");
   const [urgency, setUrgency] = useState("Normal");
+  const [formData, setFormData] = useState({
+    full_name: "",
+    university_school: "",
+    course_subject: "",
+    deadline: "",
+    details: "",
+    contact: "",
+  });
+  const [files, setFiles] = useState([]);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitMessage, setSubmitMessage] = useState("");
+
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setFormData((current) => ({
+      ...current,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    if (!formData.full_name.trim()) {
+      setSubmitMessage("Please enter your full name.");
+      return;
+    }
+
+    if (!selectedType) {
+      setSubmitMessage("Please select a project type.");
+      return;
+    }
+
+    if (!formData.contact.trim()) {
+      setSubmitMessage("Please enter your WhatsApp or contact number.");
+      return;
+    }
+
+    setSubmitting(true);
+    setSubmitMessage("");
+
+    try {
+      const uploadedPaths = [];
+
+      for (const file of files) {
+        const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
+        const uniqueName = `${Date.now()}-${crypto.randomUUID()}-${safeName}`;
+
+        const { error: uploadError } = await supabase.storage
+          .from("request-files")
+          .upload(uniqueName, file, {
+            cacheControl: "3600",
+            upsert: false,
+          });
+
+        if (uploadError) {
+          throw uploadError;
+        }
+
+        uploadedPaths.push(uniqueName);
+      }
+
+      const { error: requestError } = await supabase.from("requests").insert({
+        full_name: formData.full_name.trim(),
+        university_school: formData.university_school.trim(),
+        course_subject: formData.course_subject.trim(),
+        project_type: selectedType,
+        details: formData.details.trim(),
+        contact: formData.contact.trim(),
+        deadline: formData.deadline.trim(),
+        urgency,
+        status: "pending",
+        file_paths: uploadedPaths,
+      });
+
+      if (requestError) {
+        throw requestError;
+      }
+
+      setSubmitMessage("Request sent successfully. We will contact you on WhatsApp.");
+      setFormData({
+        full_name: "",
+        university_school: "",
+        course_subject: "",
+        deadline: "",
+        details: "",
+        contact: "",
+      });
+      setSelectedType("");
+      setUrgency("Normal");
+      setFiles([]);
+    } catch (error) {
+      console.error("Request submission failed:", error);
+      setSubmitMessage(`Could not send request: ${error.message}`);
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   const navItems = ["home", "about", "services"];
   const serviceIcons = [Search, Presentation, FileText, PenLine, Palette, BarChart3, BriefcaseBusiness, Megaphone, Timer, Sparkles, Quote, GraduationCap, Video, NotebookTabs, ShieldCheck];
@@ -98,19 +201,42 @@ const projectTypes = [
     "Branding / Design",
     "Others",
   ];
+if (adminOpen) {
+  return <AdminDashboard onBack={() => setAdminOpen(false)} />;
+}
 
   return (
-    <div className="min-h-screen bg-[#06142E] text-white">
-      <header className="relative z-50 mx-auto flex max-w-7xl items-center justify-between px-6 py-7">
-        <div className="flex items-center gap-3">
-         <img
+  <div
+  className="min-h-screen bg-cover bg-center bg-fixed"
+  style={{
+    backgroundImage: `linear-gradient(rgba(5, 24, 55, 0.50), rgba(5, 24, 55, 0.50)), url(${rosesBg})`,
+  }}
+>
+<header
+  className="sticky top-0 z-50 mx-auto flex max-w-7xl items-center justify-between
+  rounded-2xl border border-white/20
+  bg-[#06142E]/70 px-6 py-5
+  backdrop-blur-md shadow-[0_8px_30px_rgba(0,0,0,0.35)]"
+>   <div className="flex items-center gap-3">
+        <img
   src={draftsLogo}
   alt="Drafts"
-  className="h-12 w-12 object-contain"
+  className="h-12 w-12 object-contain
+             drop-shadow-[0_0_6px_rgba(255,255,255,1)]
+             drop-shadow-[0_0_14px_rgba(255,255,255,0.9)]
+             drop-shadow-[0_0_25px_rgba(255,255,255,0.7)]"
 />
           <div>
             <div>
-              <h1 className="text-lg font-bold tracking-[0.22em]">DRAFTS</h1>
+             <h1
+  className="text-lg font-bold tracking-[0.22em] text-white"
+  style={{
+    textShadow:
+      "0 0 6px rgba(255,255,255,0.95), 0 0 14px rgba(255,255,255,0.75), 0 0 28px rgba(255,255,255,0.45)"
+  }}
+>
+  DRAFTS
+</h1>
               <p className="mt-1 text-[8px] uppercase tracking-[0.28em] text-white/60">Academic Partner</p>
             </div>
             
@@ -128,7 +254,13 @@ const projectTypes = [
             </button>
           ))}
         </nav>
-
+<button
+  type="button"
+  onClick={() => setAdminOpen(true)}
+  className="rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-bold text-blue-100 transition hover:bg-white/10 hover:text-white"
+>
+  ...
+</button>
         
       </header>
 
@@ -143,7 +275,7 @@ const projectTypes = [
                   <Sparkles size={15} /> <Sparkles size={15} /> Built by UAE university students for all students across the UAE
                 </div>
 
-                <h2 className="mx-auto max-w-4xl text-5xl font-black leading-tight tracking-tight md:text-7xl">
+               <h2 className="mx-auto max-w-4xl text-5xl font-black leading-tight tracking-tight text-white md:text-7xl">
                   Structure your work and ideas better.
                 </h2>
 
@@ -170,12 +302,12 @@ const projectTypes = [
                   </div>
                 </div>
 
-                <form className="grid gap-4">
+                <form className="grid gap-4" onSubmit={handleSubmit}>
                   <div className="grid gap-4 md:grid-cols-2">
-                    <input className="rounded-2xl border-2 border-blue-200 px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-200/50" placeholder="Full Name" />
-                    <input className="rounded-2xl border-2 border-blue-200 px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-200/50" placeholder="University / School" />
+                    <input name="full_name" value={formData.full_name} onChange={handleInputChange} required className="rounded-2xl border-2 border-blue-200 px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-200/50" placeholder="Full Name" />
+                    <input name="university_school" value={formData.university_school} onChange={handleInputChange} className="rounded-2xl border-2 border-blue-200 px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-200/50" placeholder="University / School" />
                   </div>
-                  <input className="rounded-2xl border-2 border-blue-200 px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-200/50" placeholder="Course / Subject" />
+                  <input name="course_subject" value={formData.course_subject} onChange={handleInputChange} className="rounded-2xl border-2 border-blue-200 px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-200/50" placeholder="Course / Subject" />
                   <div className="grid grid-cols-2 gap-3 md:grid-cols-3">
                     {projectTypes.map((type) => (
                       <button
@@ -188,7 +320,7 @@ const projectTypes = [
                       </button>
                     ))}
                   </div>
-                  <input className="rounded-2xl border-2 border-blue-200 px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-200/50" placeholder="Deadline" />
+                  <input name="deadline" value={formData.deadline} onChange={handleInputChange} className="rounded-2xl border-2 border-blue-200 px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-200/50" placeholder="Deadline" />
 
                   <div>
                     <p className="mb-3 text-sm font-black text-blue-900">Deadline Urgency</p>
@@ -205,14 +337,50 @@ const projectTypes = [
                       ))}
                     </div>
                   </div>
-                  <textarea className="min-h-36 rounded-2xl border-2 border-blue-200 px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-200/50" placeholder="Project Details" />
+                  <textarea name="details" value={formData.details} onChange={handleInputChange} className="min-h-36 rounded-2xl border-2 border-blue-200 px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-200/50" placeholder="Project Details" />
                   <label className="flex cursor-pointer items-center justify-center gap-3 rounded-2xl border border-dashed border-blue-300 bg-blue-50 px-4 py-6 font-semibold text-blue-800 transition hover:bg-blue-100">
-                    <Upload size={20} /> Upload Files / Screenshots / Instructions
+                    <Upload size={20} />
+                    <span>
+                      {files.length > 0
+                        ? `${files.length} file${files.length === 1 ? "" : "s"} selected`
+                        : "Upload Files / Screenshots / Instructions"}
+                    </span>
+                    <input
+                      type="file"
+                      multiple
+                      className="hidden"
+                      accept=".pdf,.ppt,.pptx,.doc,.docx,.zip,.png,.jpg,.jpeg"
+                      onChange={(event) => setFiles(Array.from(event.target.files || []))}
+                    />
                   </label>
                   <p className="-mt-2 text-center text-xs font-semibold text-slate-500">Supported files: PDF, PPTX, DOCX, ZIP, PNG, JPG</p>
-                  <input className="rounded-2xl border-2 border-blue-200 px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-200/50" placeholder="Contact Number / WhatsApp" />
-                  <button type="button" className="rounded-2xl bg-blue-700 px-6 py-4 font-bold text-white transition hover:bg-blue-800">
-                    Send My Request
+                  <input
+                    name="contact"
+                    value={formData.contact}
+                    onChange={handleInputChange}
+                    required
+                    className="rounded-2xl border-2 border-blue-200 px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-200/50"
+                    placeholder="Contact Number / WhatsApp"
+                  />
+
+                  {submitMessage && (
+                    <div
+                      className={`rounded-2xl px-4 py-3 text-sm font-semibold ${
+                        submitMessage.startsWith("Request sent")
+                          ? "bg-emerald-50 text-emerald-700"
+                          : "bg-red-50 text-red-700"
+                      }`}
+                    >
+                      {submitMessage}
+                    </div>
+                  )}
+
+                  <button
+                    type="submit"
+                    disabled={submitting}
+                    className="rounded-2xl bg-blue-700 px-6 py-4 font-bold text-white transition hover:bg-blue-800 disabled:cursor-not-allowed disabled:opacity-60"
+                  >
+                    {submitting ? "Sending..." : "Send My Request"}
                   </button>
                 </form>
               </div>
@@ -371,14 +539,20 @@ const projectTypes = [
 
       {page === "home" && (
         <a
-          href="https://wa.me/971545257574"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="fixed bottom-6 right-6 z-50 flex items-center gap-3 rounded-full bg-[#25D366] px-5 py-4 font-bold text-white shadow-2xl shadow-black/30 transition hover:scale-105 hover:bg-[#20bd5a]"
-        >
-          <MessageCircleMore size={22} />
-          WhatsApp
-        </a>
+  href="https://wa.me/971545257574"
+  target="_blank"
+  rel="noopener noreferrer"
+  aria-label="WhatsApp"
+  className="fixed bottom-6 right-6 z-50 flex h-16 w-16 items-center justify-center rounded-full bg-[#25D366] text-white shadow-2xl shadow-black/30 transition hover:scale-110 hover:bg-[#20bd5a]"
+>
+  <svg
+    viewBox="0 0 32 32"
+    className="h-8 w-8 fill-current"
+    aria-hidden="true"
+  >
+    <path d="M16.03 3C8.84 3 3 8.77 3 15.9c0 2.29.61 4.53 1.77 6.49L3 29l6.81-1.75a13.11 13.11 0 0 0 6.22 1.57h.01C23.22 28.82 29 23.05 29 15.92 29 8.78 23.22 3 16.03 3Zm7.58 18.18c-.32.9-1.87 1.73-2.6 1.84-.67.1-1.51.14-2.44-.15-.56-.18-1.29-.42-2.22-.82-3.91-1.69-6.46-5.63-6.66-5.89-.2-.26-1.59-2.11-1.59-4.03 0-1.92 1-2.86 1.36-3.25.36-.39.78-.49 1.04-.49.26 0 .52 0 .75.01.24.01.56-.09.88.67.32.77 1.1 2.67 1.2 2.86.1.2.16.43.03.69-.13.26-.2.42-.39.65-.2.23-.41.51-.59.69-.2.2-.4.41-.17.8.23.39 1.02 1.68 2.19 2.72 1.51 1.34 2.78 1.76 3.18 1.96.39.2.62.16.85-.1.23-.26.98-1.14 1.24-1.53.26-.39.52-.33.88-.2.36.13 2.28 1.07 2.67 1.27.39.2.65.29.75.46.1.16.1.94-.22 1.84Z" />
+  </svg>
+</a>
       )}
     </div>
   );
