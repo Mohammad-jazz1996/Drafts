@@ -380,7 +380,7 @@ if (adminOpen) {
                     disabled={submitting}
                     className="rounded-2xl bg-blue-700 px-6 py-4 font-bold text-white transition hover:bg-blue-800 disabled:cursor-not-allowed disabled:opacity-60"
                   >
-                    {submitting ? "Sending..." : "Send My Request"}
+                    {submitting ? "Sending..." : "Send Request"}
                   </button>
                 </form>
               </div>
