@@ -342,7 +342,7 @@ if (adminOpen) {
                   <Sparkles size={15} /> <Sparkles size={15} /> Built by UAE university students for all students across the UAE
                 </div>
 
-<h2 className="mx-auto max-w-4xl text-5xl font-black leading-tight tracking-tight text-white md:text-7xl">  {"Build Drafts You’re Proud to Submit.".split(" ").map((word, index) => (
+<h2 className="mx-auto max-w-4xl text-3xl font-black leading-[1.15] tracking-tight text-white sm:text-4xl md:text-7xl">  {"Build Drafts You’re Proud to Submit.".split(" ").map((word, index) => (
     <motion.span
       key={index}
      className={`inline-block mr-[0.25em] ${
