@@ -342,7 +342,7 @@ if (adminOpen) {
                   <Sparkles size={15} /> <Sparkles size={15} /> Built by UAE university students for all students across the UAE
                 </div>
 
-<h2 className="mx-auto max-w-4xl text-3xl font-black leading-[1.15] tracking-tight text-white sm:text-4xl md:text-7xl">  {"Build Drafts You’re Proud to Submit.".split(" ").map((word, index) => (
+<h2 className="mx-auto max-w-4xl text-5xl font-black leading-tight tracking-tight text-white md:text-7xl">  {"Build Drafts You’re Proud to Submit.".split(" ").map((word, index) => (
     <motion.span
       key={index}
      className={`inline-block mr-[0.25em] ${
@@ -368,7 +368,7 @@ if (adminOpen) {
                 </p>
               </div>
 
-              <div id="submit" className="mx-auto grid max-w-5xl gap-12 rounded-[2.5rem] bg-white p-8 text-slate-950 shadow-2xl shadow-black/20 md:grid-cols-[0.75fr_1.25fr]">
+              <<div id="submit" className="mx-auto grid max-w-5xl gap-8 rounded-[2rem] bg-white p-4 text-slate-950 shadow-2xl shadow-black/20 sm:p-6 md:grid-cols-[0.75fr_1.25fr] md:gap-12 md:rounded-[2.5rem] md:p-8">
                 <div>
                   <p className="font-bold uppercase tracking-[0.25em] text-blue-700">Submit</p>
                   <h2 className="mt-4 text-4xl font-black tracking-tight">Send your request</h2>
@@ -425,35 +425,28 @@ if (adminOpen) {
 </select>
                   </div>
                   <input name="course_subject" value={formData.course_subject} onChange={handleInputChange} className="rounded-2xl border-2 border-blue-200 px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-200/50" placeholder="Course / Subject" />
-                  <div className="grid grid-cols-2 gap-3 md:grid-cols-3">
+                  <div className="grid grid-cols-2 gap-2 sm:gap-3 md:grid-cols-3">
                     {projectTypes.map((type) => (
                       <button
                         key={type}
                         type="button"
                         onClick={() => setSelectedType(type)}
-                        className={`rounded-2xl border px-4 py-3 text-sm font-black shadow-sm transition ${selectedType === type ? "border-blue-700 bg-blue-700 text-white" : "border-blue-100 bg-gradient-to-br from-blue-50 to-cyan-50 text-blue-900 hover:border-blue-300 hover:from-blue-100 hover:to-cyan-100 hover:text-blue-700"}`}
+                       className={`rounded-xl border px-2 py-2.5 text-xs font-black sm:rounded-2xl sm:px-4 sm:py-3 sm:text-sm shadow-sm transition ${selectedType === type ? "border-blue-700 bg-blue-700 text-white" : "border-blue-100 bg-gradient-to-br from-blue-50 to-cyan-50 text-blue-900 hover:border-blue-300 hover:from-blue-100 hover:to-cyan-100 hover:text-blue-700"}`}
                       >
                         {type}
                       </button>
                     ))}
                   </div>
-               <input
-  type="date"
-  name="deadline"
-  value={formData.deadline}
-  onChange={handleInputChange}
-  className="w-full rounded-2xl border-2 border-blue-200 bg-white px-5 py-4 text-slate-700 outline-none"
-/>
+             className="w-full rounded-xl border-2 border-blue-200 bg-white px-4 py-3 text-sm text-slate-700 outline-none sm:rounded-2xl sm:px-5 sm:py-4 sm:text-base"
 
                   <div>
                     <p className="mb-3 text-sm font-black text-blue-900">Deadline Urgency</p>
-                    <div className="grid grid-cols-3 gap-3">
-                      {["Normal", "Urgent", "Emergency"].map((level) => (
+<div className="grid grid-cols-3 gap-2 sm:gap-3">{["Normal", "Urgent", "Emergency"].map((level) => (
                         <button
                           key={level}
                           type="button"
                           onClick={() => setUrgency(level)}
-                          className={`rounded-2xl border px-4 py-3 text-sm font-black transition ${urgency === level ? "border-blue-700 bg-blue-700 text-white" : "border-blue-100 bg-blue-50 text-blue-900 hover:bg-blue-100"}`}
+className={`rounded-xl border px-2 py-2.5 text-xs font-black transition sm:rounded-2xl sm:px-4 sm:py-3 sm:text-sm${urgency === level ? "border-blue-700 bg-blue-700 text-white" : "border-blue-100 bg-blue-50 text-blue-900 hover:bg-blue-100"}`}
                         >
                           {level}
                         </button>
@@ -461,7 +454,7 @@ if (adminOpen) {
                     </div>
                   </div>
                   <textarea name="details" value={formData.details} onChange={handleInputChange} className="min-h-36 rounded-2xl border-2 border-blue-200 px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-200/50" placeholder="Project Details" />
-                  <label className="flex cursor-pointer items-center justify-center gap-3 rounded-2xl border border-dashed border-blue-300 bg-blue-50 px-4 py-6 font-semibold text-blue-800 transition hover:bg-blue-100">
+                  <label className="flex cursor-pointer items-center justify-center gap-2 rounded-xl border border-dashed border-blue-300 bg-blue-50 px-3 py-4 text-sm font-semibold text-blue-800 transition hover:bg-blue-100 sm:gap-3 sm:rounded-2xl sm:px-4 sm:py-6 sm:text-base">
                     <Upload size={20} />
                     <span>
                       {files.length > 0
