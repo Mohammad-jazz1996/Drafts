@@ -1,11 +1,33 @@
 import draftsLogo from "./assets/drafts-logo.png";
+import blueRose from "./assets/blue-rose.png";
 import AdminDashboard from "./AdminDashboard";
 import rosesBg from "./assets/roses-bg.png";
 import React, { useState } from "react";
 import { Search, Presentation, FileText, PenLine, Palette, BarChart3, Megaphone, Timer, Upload, MessageCircleMore, Sparkles, Quote, GraduationCap, Video, NotebookTabs, BriefcaseBusiness, ShieldCheck } from "lucide-react";
 import { motion } from "framer-motion";
 import { supabase } from "./supabase";
+const floatingRoses = [
+  { left: "3%", top: "8%", size: 90, duration: 8, delay: 0 },
+  { left: "14%", top: "22%", size: 60, duration: 10, delay: 1 },
+  { left: "27%", top: "5%", size: 75, duration: 9, delay: 2 },
+  { left: "40%", top: "18%", size: 55, duration: 11, delay: 0.5 },
+  { left: "54%", top: "7%", size: 85, duration: 8, delay: 1.5 },
+  { left: "68%", top: "20%", size: 65, duration: 12, delay: 2.5 },
+  { left: "82%", top: "6%", size: 95, duration: 9, delay: 1 },
+  { left: "91%", top: "28%", size: 55, duration: 10, delay: 3 },
 
+  { left: "7%", top: "45%", size: 70, duration: 11, delay: 2 },
+  { left: "20%", top: "58%", size: 100, duration: 9, delay: 0 },
+  { left: "34%", top: "42%", size: 60, duration: 8, delay: 1 },
+  { left: "48%", top: "62%", size: 80, duration: 12, delay: 2 },
+  { left: "61%", top: "48%", size: 55, duration: 10, delay: 0.5 },
+  { left: "74%", top: "66%", size: 95, duration: 9, delay: 1.5 },
+  { left: "88%", top: "50%", size: 65, duration: 11, delay: 2.5 },
+
+  { left: "12%", top: "82%", size: 85, duration: 10, delay: 1 },
+  { left: "47%", top: "84%", size: 70, duration: 8, delay: 2 },
+  { left: "79%", top: "86%", size: 90, duration: 12, delay: 0 },
+];
 export default function DraftsWebsite() {
 const [adminOpen, setAdminOpen] = useState(false);
   const [page, setPage] = useState("home");
@@ -212,6 +234,51 @@ if (adminOpen) {
     backgroundImage: `linear-gradient(rgba(5, 24, 55, 0.50), rgba(5, 24, 55, 0.50)), url(${rosesBg})`,
   }}
 >
+<div className="pointer-events-none absolute inset-0 z-10 overflow-hidden">
+  {floatingRoses.map((rose, index) => (
+    <motion.img
+      key={index}
+      src={blueRose}
+      alt=""
+      className="absolute opacity-30 drop-shadow-[0_0_12px_rgba(96,165,250,0.55)]"
+      style={{
+        left: rose.left,
+        top: rose.top,
+        width: rose.size,
+        height: rose.size,
+      }}
+    animate={{
+  x:
+    index % 2 === 0
+      ? ["-20vw", "110vw"]
+      : ["110vw", "-20vw"],
+  y: [0, -25, 15, -15, 0],
+  rotate:
+    index % 2 === 0
+      ? [0, 15, -8, 10, 0]
+      : [0, -15, 8, -10, 0],
+}}
+     transition={{
+  x: {
+   duration: 35 + (index % 6) * 4,
+    repeat: Infinity,
+    ease: "linear",
+    delay: rose.delay,
+  },
+  y: {
+    duration: 5 + (index % 4),
+    repeat: Infinity,
+    ease: "easeInOut",
+  },
+  rotate: {
+    duration: 7 + (index % 5),
+    repeat: Infinity,
+    ease: "easeInOut",
+  },
+}}
+    />
+  ))}
+</div>
 <header
   className="sticky top-0 z-50 mx-auto flex max-w-7xl items-center justify-between
   rounded-2xl border border-white/20
@@ -266,18 +333,35 @@ if (adminOpen) {
 
       <main>
         {page === "home" && (
-          <section className="relative overflow-hidden px-6 py-16">
-            <div className="absolute left-1/2 top-[-180px] h-[520px] w-[520px] -translate-x-1/2 rounded-full bg-blue-500/20 blur-3xl" />
+          <section className="relative z-20 overflow-hidden px-6 py-16">
+<div className="absolute left-1/2 top-[-180px] h-[520px] w-[520px] -translate-x-1/2 rounded-full bg-blue-500/20 blur-3xl" />
 
-            <div className="relative mx-auto max-w-6xl rounded-[3rem] border border-white/10 bg-white/5 p-6 backdrop-blur-xl md:p-10">
+            <div className="relative mx-auto max-w-6xl rounded-[3rem] border border-white/10 bg-white/5 p-6 backdrop-blur-none md:p-10">
               <div className="mb-10 text-center">
                 <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-blue-300/20 bg-white/10 px-4 py-2 text-sm text-blue-100">
                   <Sparkles size={15} /> <Sparkles size={15} /> Built by UAE university students for all students across the UAE
                 </div>
 
-               <h2 className="mx-auto max-w-4xl text-5xl font-black leading-tight tracking-tight text-white md:text-7xl">
-                  Structure your work and ideas better.
-                </h2>
+<h2 className="mx-auto max-w-4xl text-5xl font-black leading-tight tracking-tight text-white md:text-7xl">  {"Build Drafts You’re Proud to Submit.".split(" ").map((word, index) => (
+    <motion.span
+      key={index}
+     className={`inline-block mr-[0.25em] ${
+  word === "Submit."
+    ? "text-transparent [-webkit-text-stroke:2px_white]"
+    : "text-white"
+}`}
+      animate={{ y: [0, -12, 0, 12, 0] }}
+      transition={{
+        duration: 2.5,
+        repeat: Infinity,
+        delay: index * 0.12,
+        ease: "easeInOut",
+      }}
+    >
+      {word}
+    </motion.span>
+  ))}
+</h2>
 
                 <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-blue-100">
                   Your academic partner for cleaner, smarter student work.
@@ -305,7 +389,40 @@ if (adminOpen) {
                 <form className="grid gap-4" onSubmit={handleSubmit}>
                   <div className="grid gap-4 md:grid-cols-2">
                     <input name="full_name" value={formData.full_name} onChange={handleInputChange} required className="rounded-2xl border-2 border-blue-200 px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-200/50" placeholder="Full Name" />
-                    <input name="university_school" value={formData.university_school} onChange={handleInputChange} className="rounded-2xl border-2 border-blue-200 px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-200/50" placeholder="University / School" />
+                  <select
+  name="university_school"
+  value={formData.university_school}
+  onChange={handleInputChange}
+  className="w-full rounded-2xl border-2 border-blue-200 bg-white px-5 py-4 text-slate-700 outline-none"
+>
+  <option value="">Select University / College</option>
+  <option value="United Arab Emirates University">United Arab Emirates University</option>
+  <option value="Zayed University">Zayed University</option>
+  <option value="Higher Colleges of Technology">Higher Colleges of Technology</option>
+  <option value="Khalifa University">Khalifa University</option>
+  <option value="Abu Dhabi University">Abu Dhabi University</option>
+  <option value="Al Ain University">Al Ain University</option>
+  <option value="Ajman University">Ajman University</option>
+  <option value="University of Sharjah">University of Sharjah</option>
+  <option value="American University of Sharjah">American University of Sharjah</option>
+  <option value="American University in Dubai">American University in Dubai</option>
+  <option value="American University of Ras Al Khaimah">American University of Ras Al Khaimah</option>
+  <option value="Canadian University Dubai">Canadian University Dubai</option>
+  <option value="University of Dubai">University of Dubai</option>
+  <option value="University of Birmingham Dubai">University of Birmingham Dubai</option>
+  <option value="University of Wollongong in Dubai">University of Wollongong in Dubai</option>
+  <option value="British University in Dubai">British University in Dubai</option>
+  <option value="Sorbonne University Abu Dhabi">Sorbonne University Abu Dhabi</option>
+  <option value="Mohammed Bin Rashid University of Medicine and Health Sciences">
+    Mohammed Bin Rashid University of Medicine and Health Sciences
+  </option>
+  <option value="Mohammed Bin Zayed University of Humanities">
+    Mohammed Bin Zayed University of Humanities
+  </option>
+  <option value="Abu Dhabi Polytechnic">Abu Dhabi Polytechnic</option>
+  <option value="Fatima College of Health Sciences">Fatima College of Health Sciences</option>
+  <option value="Other">Other</option>
+</select>
                   </div>
                   <input name="course_subject" value={formData.course_subject} onChange={handleInputChange} className="rounded-2xl border-2 border-blue-200 px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-200/50" placeholder="Course / Subject" />
                   <div className="grid grid-cols-2 gap-3 md:grid-cols-3">
@@ -320,7 +437,13 @@ if (adminOpen) {
                       </button>
                     ))}
                   </div>
-                  <input name="deadline" value={formData.deadline} onChange={handleInputChange} className="rounded-2xl border-2 border-blue-200 px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-200/50" placeholder="Deadline" />
+               <input
+  type="date"
+  name="deadline"
+  value={formData.deadline}
+  onChange={handleInputChange}
+  className="w-full rounded-2xl border-2 border-blue-200 bg-white px-5 py-4 text-slate-700 outline-none"
+/>
 
                   <div>
                     <p className="mb-3 text-sm font-black text-blue-900">Deadline Urgency</p>
