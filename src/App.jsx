@@ -282,13 +282,13 @@ if (adminOpen) {
 <header
   className="sticky top-0 z-50 mx-auto flex max-w-7xl items-center justify-between
   rounded-2xl border border-white/20
-  bg-[#06142E]/70 px-6 py-5
+  bg-[#06142E]/70 px-3 py-3 sm:px-6 sm:py-5
   backdrop-blur-md shadow-[0_8px_30px_rgba(0,0,0,0.35)]"
 >   <div className="flex items-center gap-3">
         <img
   src={draftsLogo}
   alt="Drafts"
-  className="h-12 w-12 object-contain
+  className="h-10 w-10 sm:h-12 sm:w-12 object-contain
              drop-shadow-[0_0_6px_rgba(255,255,255,1)]
              drop-shadow-[0_0_14px_rgba(255,255,255,0.9)]
              drop-shadow-[0_0_25px_rgba(255,255,255,0.7)]"
@@ -296,7 +296,7 @@ if (adminOpen) {
           <div>
             <div>
              <h1
-  className="text-lg font-bold tracking-[0.22em] text-white"
+ className="text-base font-bold tracking-[0.18em] text-white sm:text-lg sm:tracking-[0.22em]"
   style={{
     textShadow:
       "0 0 6px rgba(255,255,255,0.95), 0 0 14px rgba(255,255,255,0.75), 0 0 28px rgba(255,255,255,0.45)"
@@ -333,7 +333,7 @@ if (adminOpen) {
 
       <main>
         {page === "home" && (
-          <section className="relative z-20 overflow-hidden px-6 py-16">
+      <section className="relative z-20 overflow-hidden px-2 py-8 sm:px-6 sm:py-16">
 <div className="absolute left-1/2 top-[-180px] h-[520px] w-[520px] -translate-x-1/2 rounded-full bg-blue-500/20 blur-3xl" />
 
             <div className="relative mx-auto max-w-6xl rounded-[3rem] border border-white/10 bg-white/5 p-6 backdrop-blur-none md:p-10">
